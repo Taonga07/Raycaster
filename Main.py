@@ -1,7 +1,7 @@
 from math import pi, radians, sin, cos
 import pygame
 
-pygame.init() # pylint: disable=E1101
+pygame.init()  # pylint: disable=E1101
 window = pygame.display.set_mode((300, 300))
 GameWorld = [a.split() for a in open("GameWorlds/World.txt").read().split("\n")]
 playerposx, playerposy = 2, 1
