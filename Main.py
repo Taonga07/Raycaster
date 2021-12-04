@@ -17,5 +17,5 @@ while True:
                 height = 1 / (0.02 * n)
                 print(height)
                 break
-        pygame.draw.line(window, (0, 0, 0), (i, -height), (i, height))
+        pygame.draw.line(window, (125, 125, 125), (-height, i), (height, i))
     pygame.display.update()
