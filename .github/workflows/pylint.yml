@@ -17,12 +17,10 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip3 install autopep8
-        pip3 install black
-        pip install pylint
+        pip3 install -r requirements.txt
     - name: Cleaning Code
       run: |
-        find . -name '*.py' -exec autopep8 --in-place --ignore E402 '{}' \;
+        find . -name '*.py' -exec autopep8 --in-place '{}' \;
         find . -name '*.py' -exec black '{}' \;
     - name: Comitting Cleaned Code
       uses: EndBug/add-and-commit@v7
