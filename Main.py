@@ -2,7 +2,8 @@ from math import pi, radians, sin, cos
 import pygame
 
 pygame.init()  # pylint: disable=E1101
-window = pygame.display.set_mode((300, 300))
+SCREEEN_SIZE = 300
+window = pygame.display.set_mode((SCREEEN_SIZE, SCREEEN_SIZE))
 GameWorld = [a.split() for a in open("GameWorlds/World.txt").read().split("\n")]
 playerposx, playerposy = 2, 1
 
@@ -17,5 +18,5 @@ while True:
                 height = 1 / (0.02 * n)
                 print(height)
                 break
-        pygame.draw.line(window, (125, 125, 125), (-height, i), (height, i))
+        pygame.draw.line(window, (125, 125, 125), ((SCREEEN_SIZE/2) + (height/2), i), ((SCREEEN_SIZE/2) - (height/2), i))
     pygame.display.update()
