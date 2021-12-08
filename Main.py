@@ -15,7 +15,7 @@ while True:
         while True:
             x, y, n = x + tcos, y + tsin, n + 1
             if GameWorld[int(x)][int(y)] != "0":
-                height = (1 / (0.02 * n)) *SCREEEN_SIZE
+                height = (1 / (0.02 * n)) * SCREEEN_SIZE
                 break
         pygame.draw.line(
             window,
