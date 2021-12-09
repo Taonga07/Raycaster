@@ -9,6 +9,7 @@ clock = pygame.time.Clock()
 GameWorld = [a.split() for a in open("GameWorlds/World.txt").read().split("\n")]
 playerposx, playerposy = 2, 1
 
+
 def fancy_maths():
     rot_i = (pi / 4) + radians(i - 30)
     x, y, n = playerposx, playerposy, 0
@@ -18,6 +19,7 @@ def fancy_maths():
         if GameWorld[int(x)][int(y)] != "0":
             height = (1 / (0.02 * n)) * SCREEEN_SIZE
             return height
+
 
 while True:
     print(playerposx, playerposy)
@@ -35,7 +37,11 @@ while True:
                 playerposy -= 1
     for i in range(VIEWSIZE):
         height = fancy_maths()
-        linex, lineofsety = i+(i*(SCREEEN_SIZE/VIEWSIZE)), (SCREEEN_SIZE / 2) + (height / 2)
-        pygame.draw.line(window,(125, 125, 125), (linex, lineofsety), (linex,lineofsety))
+        linex, lineofsety = i + (i * (SCREEEN_SIZE / VIEWSIZE)), (SCREEEN_SIZE / 2) + (
+            height / 2
+        )
+        pygame.draw.line(
+            window, (125, 125, 125), (linex, lineofsety), (linex, lineofsety)
+        )
     pygame.display.flip()
     clock.tick()
