@@ -37,7 +37,12 @@ while True:
                 playerposy -= 1
     for i in range(VIEWSIZE):
         height = fancy_maths()
-        linex = i+(i*(SCREEEN_SIZE/VIEWSIZE))
-        pygame.draw.line(window,(125, 125, 125), (linex, ((SCREEEN_SIZE / 2) + (height / 2))), (linex,((SCREEEN_SIZE / 2) - (height / 2))))
+        linex = i + (i * (SCREEEN_SIZE / VIEWSIZE))
+        pygame.draw.line(
+            window,
+            (125, 125, 125),
+            (linex, ((SCREEEN_SIZE / 2) + (height / 2))),
+            (linex, ((SCREEEN_SIZE / 2) - (height / 2))),
+        )
     pygame.display.flip()
     clock.tick()
