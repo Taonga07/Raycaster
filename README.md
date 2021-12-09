@@ -9,5 +9,6 @@
 
  This is a 3D game using pygame. Currently only shows a 3d image with pyplot but moving to pygame.
  For a list of features I Plan to add to the game see [here](https://github.com/Taonga07/Raycaster/projects/1):
- - [ ] move to pygame
+ - [x] move to pygame
+ - [ ] add movement
  - [ ] add z axis
