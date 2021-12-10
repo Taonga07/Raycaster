@@ -22,7 +22,7 @@ def fancy_maths():
 
 
 while True:
-    window.fill((0,0,0))
+    window.fill((0, 0, 0))
     print(playerposx, playerposy)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
