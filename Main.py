@@ -7,11 +7,11 @@ SCREEEN_SIZE, VIEWSIZE = 300, 60
 window = pygame.display.set_mode((SCREEEN_SIZE, SCREEEN_SIZE))
 clock = pygame.time.Clock()
 GameWorld = [a.split() for a in open("GameWorlds/World.txt").read().split("\n")]
-playerposx, playerposy = 2, 1
+playerposx, playerposy, look_dir = 2, 1, 30
 
 
 def fancy_maths():
-    rot_i = (pi / 4) + radians(i - 60)
+    rot_i = (pi / 4) + radians(i - look_dir)
     x, y, n = playerposx, playerposy, 0
     tsin, tcos = 0.02 * sin(rot_i), 0.02 * cos(rot_i)
     while True:
@@ -33,9 +33,9 @@ while True:
             if event.key == pygame.K_DOWN:
                 playerposx -= 0.1
             if event.key == pygame.K_LEFT:
-                playerposy += 0.1
+                look_dir += 1.5
             if event.key == pygame.K_RIGHT:
-                playerposy -= 0.1
+                look_dir -= 1.5
     for i in range(VIEWSIZE):
         height = fancy_maths()
         linex = i + (i * (SCREEEN_SIZE / VIEWSIZE))
