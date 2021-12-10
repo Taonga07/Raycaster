@@ -11,7 +11,7 @@ playerposx, playerposy = 2, 1
 
 
 def fancy_maths():
-    rot_i = (pi / 4) + radians(i - 30)
+    rot_i = (pi / 4) + radians(i - 60)
     x, y, n = playerposx, playerposy, 0
     tsin, tcos = 0.02 * sin(rot_i), 0.02 * cos(rot_i)
     while True:
@@ -22,19 +22,20 @@ def fancy_maths():
 
 
 while True:
+    window.fill((0,0,0))
     print(playerposx, playerposy)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             exit()
-        if event.type == pygame.KEYUP:
+        if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP:
-                playerposx += 1
+                playerposx += 0.1
             if event.key == pygame.K_DOWN:
-                playerposx -= 1
+                playerposx -= 0.1
             if event.key == pygame.K_LEFT:
-                playerposy += 1
+                playerposy += 0.1
             if event.key == pygame.K_RIGHT:
-                playerposy -= 1
+                playerposy -= 0.1
     for i in range(VIEWSIZE):
         height = fancy_maths()
         linex = i + (i * (SCREEEN_SIZE / VIEWSIZE))
@@ -44,5 +45,5 @@ while True:
             (linex, ((SCREEEN_SIZE / 2) + (height / 2))),
             (linex, ((SCREEEN_SIZE / 2) - (height / 2))),
         )
-    pygame.display.flip()
+    pygame.display.update()
     clock.tick()
