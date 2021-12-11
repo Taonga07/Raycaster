@@ -1,5 +1,4 @@
 from math import pi, radians, sin, cos
-from time import sleep
 import pygame
 
 pygame.init()  # pylint: disable=E1101
@@ -7,7 +6,7 @@ SCREEEN_SIZE, VIEWSIZE = 300, 60
 window = pygame.display.set_mode((SCREEEN_SIZE, SCREEEN_SIZE))
 clock = pygame.time.Clock()
 GameWorld = [a.split() for a in open("GameWorlds/World.txt").read().split("\n")]
-playerposx, playerposy, look_dir = 2, 1, 30
+playerposx, playerposy, look_dir, player_speed = 2, 1, 30, 0.01
 
 
 def fancy_maths():
@@ -20,22 +19,26 @@ def fancy_maths():
             height = (1 / (0.02 * n)) * SCREEEN_SIZE
             return height
 
+def move_player(move_dir, posx, posy):
+    look_rad = radians(look_dir)
+    posy += move_dir * player_speed * cos(look_rad)
+    posx += move_dir * player_speed * sin(look_rad)
+    return posx, posy
 
 while True:
     window.fill((0, 0, 0))
-    print(playerposx, playerposy)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             exit()
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP:
-                playerposx += 0.1
-            if event.key == pygame.K_DOWN:
-                playerposx -= 0.1
-            if event.key == pygame.K_LEFT:
-                look_dir += 1.5
-            if event.key == pygame.K_RIGHT:
-                look_dir -= 1.5
+    keys=pygame.key.get_pressed()
+    if keys[pygame.K_UP]:
+        playerposx, playerposy = move_player(1, playerposx, playerposy)
+    if keys[pygame.K_DOWN]:
+        playerposx, playerposy = move_player(-1, playerposx, playerposy)
+    if keys[pygame.K_LEFT]:
+        look_dir += 0.5
+    if keys[pygame.K_RIGHT]:
+        look_dir -= 0.5
     for i in range(VIEWSIZE):
         height = fancy_maths()
         linex = i + (i * (SCREEEN_SIZE / VIEWSIZE))
@@ -46,4 +49,4 @@ while True:
             (linex, ((SCREEEN_SIZE / 2) - (height / 2))),
         )
     pygame.display.update()
-    clock.tick()
+    clock.tick(60)
