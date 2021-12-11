@@ -9,19 +9,22 @@ from pygame.event import get
 from CONSTANTS import *
 from sys import exit
 
+
 class GameObject:
     def __init__(self, GameWorld) -> None:
-            self.screen = set_mode((SCREEEN_SIZE, SCREEEN_SIZE))
-            self.running, self.World, self.clock = True, GameWorld, Clock()
+        self.screen = set_mode((SCREEEN_SIZE, SCREEEN_SIZE))
+        self.running, self.World, self.clock = True, GameWorld, Clock()
+
     def CreateCamera(self):
         for x in range(len(self.World)):
             for y in range(len(self.World[x])):
                 if self.World[x][y] == "2":
                     pos = (x, y)
-                else: 
+                else:
                     pos = (1, 1)
                     self.World[x][y] = "2"
         self.camera = Camera(pos)
+
     def MainGameLoop(self):
         while self.running:
             self.screen.fill((0, 0, 0))
@@ -31,6 +34,7 @@ class GameObject:
             update()
             self.clock.tick(60)
         exit()
+
     def CheckForQuit(self):
         for event in get():
             if event.type == QUIT:
@@ -38,6 +42,7 @@ class GameObject:
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
                     self.running = False
+
     def CheckForUserEvent(self):
         keys = get_pressed()
         if keys[K_UP]:
@@ -48,9 +53,12 @@ class GameObject:
             self.camera.direction += 0.5
         if keys[K_RIGHT]:
             self.camera.direction -= 0.5
-class Camera: 
+
+
+class Camera:
     def __init__(self, pos) -> None:
         self.pos, self.direction, self.speed = pos, 30, 0.001
+
     def GetView(self, World):
         for i in range(CAMERA_VIEWSIZE):
             height = self.LookAtAngle(i, World)
@@ -61,7 +69,8 @@ class Camera:
                 (linex, ((SCREEEN_SIZE / 2) + (height / 2))),
                 (linex, ((SCREEEN_SIZE / 2) - (height / 2))),
             )
-    def LookAtAngle(self, i, World): # i = for angle in veiwsize
+
+    def LookAtAngle(self, i, World):  # i = for angle in veiwsize
         rot_i = (pi / 4) + radians(i - self.direction)
         x, y, n = self.pos[0], self.pos[1], 0
         tsin, tcos = 0.02 * sin(rot_i), 0.02 * cos(rot_i)
@@ -70,10 +79,13 @@ class Camera:
             if World[int(x)][int(y)] != "0":
                 height = (1 / (0.02 * n)) * self.SCREEEN_SIZE
                 return height
+
     def move_player(self):
         look_rad = radians(self.direction)
         self.pos[0] += self.direction * self.speed * cos(look_rad)
         self.pos[1] += self.direction * self.speed * sin(look_rad)
+
+
 if __name__ == "__main__":
     init()  # pylint: disable=E1101
     game_world = [a.split() for a in open("GameWorlds/World.txt").read().split("\n")]
