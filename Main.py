@@ -19,18 +19,20 @@ def fancy_maths():
             height = (1 / (0.02 * n)) * SCREEEN_SIZE
             return height
 
+
 def move_player(move_dir, posx, posy):
     look_rad = radians(look_dir)
     posy += move_dir * player_speed * cos(look_rad)
     posx += move_dir * player_speed * sin(look_rad)
     return posx, posy
 
+
 while True:
     window.fill((0, 0, 0))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             exit()
-    keys=pygame.key.get_pressed()
+    keys = pygame.key.get_pressed()
     if keys[pygame.K_UP]:
         playerposx, playerposy = move_player(1, playerposx, playerposy)
     if keys[pygame.K_DOWN]:
