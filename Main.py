@@ -1,6 +1,6 @@
-from pygame import init, QUIT, K_UP, K_DOWN, K_LEFT, K_RIGHT, KEYDOWN, K_ESCAPE
+from pygame import init, QUIT, K_UP, K_DOWN, K_w, K_s, KEYDOWN, K_ESCAPE
+from pygame.mouse import get_pos, set_visible
 from math import pi, radians, sin, cos
-from pygame.mouse import get_pos
 from pygame.display import set_mode
 from pygame.key import get_pressed
 from pygame.display import update
@@ -14,6 +14,7 @@ class GameObject:
     def __init__(self, GameWorld) -> None:
         self.SCREEEN_SIZE, self.CAMERA_VIEWSIZE = 300, 60
         self.screen = set_mode((self.SCREEEN_SIZE, self.SCREEEN_SIZE))
+        set_visible
         self.running, self.World, self.clock = True, GameWorld, Clock()
 
     def CreateCamera(self):
@@ -48,9 +49,9 @@ class GameObject:
     def CheckForUserEvent(self):
         Mouse_x, _ = get_pos()
         keys = get_pressed()
-        if keys[K_UP]:
+        if keys[K_UP] or keys[K_w]:
             self.camera.move(1)
-        if keys[K_DOWN]:
+        if keys[K_DOWN] or keys[K_s]:
             self.camera.move(-1)
         self.camera.direction = (self.SCREEEN_SIZE/2)+(Mouse_x*-1)
 
