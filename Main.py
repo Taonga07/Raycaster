@@ -54,7 +54,6 @@ class GameObject:
             self.camera.move(-1)
         self.camera.direction = (self.SCREEEN_SIZE/2)+(Mouse_x*-1)
 
-        
 
 class Camera:
     def __init__(self, pos, viewsize) -> None:
