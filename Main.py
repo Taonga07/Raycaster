@@ -58,7 +58,7 @@ class GameObject:
 
 class Camera:
     def __init__(self, pos, viewsize) -> None:
-        self.viewsize, self.pos, self.direction, self.speed = viewsize, pos, 30, 0.001
+        self.viewsize, self.pos, self.direction, self.speed = viewsize, pos, 30, 0.01
 
     def GetView(self, World, SCREEN_SIZE, screen):
         for i in range(self.viewsize):
@@ -83,8 +83,8 @@ class Camera:
 
     def move(self, move_dir):
         look_rad = radians(self.direction)
-        self.pos[0] += move_dir * self.speed * cos(look_rad)
-        self.pos[1] += move_dir * self.speed * sin(look_rad)
+        self.pos[1] += move_dir * self.speed * cos(look_rad)
+        self.pos[0] += move_dir * self.speed * sin(look_rad)
 
 
 if __name__ == "__main__":
