@@ -6,15 +6,16 @@ from pygame.key import get_pressed
 from pygame.display import update
 from pygame.time import Clock
 from pygame.draw import line
-from pygame.event import get
+from pygame.event import get, set_grab
 from sys import exit
 
 
 class GameObject:
     def __init__(self, GameWorld) -> None:
-        self.SCREEEN_SIZE, self.CAMERA_VIEWSIZE = 300, 60
-        self.screen = set_mode((self.SCREEEN_SIZE, self.SCREEEN_SIZE))
-        set_visible
+        self.SCREEN_SIZE, self.CAMERA_VIEWSIZE = 300, 60
+        self.screen = set_mode((self.SCREEN_SIZE, self.SCREEN_SIZE))
+        set_visible(0)
+        set_grab(1)
         self.running, self.World, self.clock = True, GameWorld, Clock()
 
     def CreateCamera(self):
@@ -33,7 +34,7 @@ class GameObject:
             self.screen.fill((0, 0, 0))
             self.CheckForUserEvent()
             self.CheckForQuit()
-            self.camera.GetView(self.World, self.SCREEEN_SIZE, self.screen)
+            self.camera.GetView(self.World, self.SCREEN_SIZE, self.screen)
             update()
             self.clock.tick(60)
         exit()
@@ -47,13 +48,13 @@ class GameObject:
                     self.running = False
 
     def CheckForUserEvent(self):
-        Mouse_x, _ = get_pos()
         keys = get_pressed()
         if keys[K_UP] or keys[K_w]:
             self.camera.move(1)
         if keys[K_DOWN] or keys[K_s]:
             self.camera.move(-1)
-        self.camera.direction = (self.SCREEEN_SIZE / 2) + (Mouse_x * -1)
+        self.camera.change_dir(self.SCREEN_SIZE, get_pos())
+        
 
 
 class Camera:
@@ -85,8 +86,10 @@ class Camera:
         look_rad = radians(self.direction)
         self.pos[1] += move_dir * self.speed * cos(look_rad)
         self.pos[0] += move_dir * self.speed * sin(look_rad)
-
-
+        
+    def change_dir(self, SCREEN_SIZE, mouse_pos):
+        self.direction = (SCREEN_SIZE / 2) + (mouse_pos[0] * -1)
+        
 if __name__ == "__main__":
     init()  # pylint: disable=E1101
     game_world = [a.split() for a in open("GameWorlds/World.txt").read().split("\n")]
