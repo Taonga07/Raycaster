@@ -23,8 +23,8 @@ jobs:
           python -m pip install --upgrade pip
           pip3 install -r requirements.txt
       - name: use pyinstaller
-       run: |
-        pyinstaller Main.py --onefile -w --windowed --noconsole --add-data="GameWorlds"
+        run: |
+          pyinstaller Main.py --onefile -w --windowed --noconsole --add-data="GameWorlds"
       - name: commit packages
         uses: EndBug/add-and-commit@v7
         with:     
