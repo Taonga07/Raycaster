@@ -1,3 +1,4 @@
+pyinstaller
 autopep8
 pygame
 pylint
