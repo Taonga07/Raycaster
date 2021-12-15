@@ -54,7 +54,6 @@ class GameObject:
         if keys[K_DOWN] or keys[K_s]:
             self.camera.move(-1)
         self.camera.change_dir(self.SCREEN_SIZE, get_pos())
-        
 
 
 class Camera:
@@ -86,10 +85,11 @@ class Camera:
         look_rad = radians(self.direction)
         self.pos[1] += move_dir * self.speed * cos(look_rad)
         self.pos[0] += move_dir * self.speed * sin(look_rad)
-        
+
     def change_dir(self, SCREEN_SIZE, mouse_pos):
         self.direction = (SCREEN_SIZE / 2) + (mouse_pos[0] * -1)
-        
+
+
 if __name__ == "__main__":
     init()  # pylint: disable=E1101
     game_world = [a.split() for a in open("GameWorlds/World.txt").read().split("\n")]
