@@ -12,7 +12,7 @@ from sys import exit
 
 class GameObject:
     def __init__(self, GameWorld) -> None:
-        self.SCREEN_SIZE, self.CAMERA_VIEWSIZE = 300, 60
+        self.SCREEN_SIZE, self.CAMERA_VIEWSIZE = 600, 60
         self.screen = set_mode((self.SCREEN_SIZE, self.SCREEN_SIZE))
         self.running, self.World, self.clock = True, GameWorld, Clock()
         set_visible(False), set_grab(True)
