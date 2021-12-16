@@ -7,38 +7,41 @@ from pygame.key import get_pressed
 from pygame.display import update
 from pygame.time import Clock
 from pygame.draw import line
-from sys import exit
 
 
 class GameObject:
-    def __init__(self, GameWorld) -> None:
-        self.SCREEN_SIZE, self.CAMERA_VIEWSIZE = 600, 60
-        self.screen = set_mode((self.SCREEN_SIZE, self.SCREEN_SIZE))
-        self.running, self.World, self.clock = True, GameWorld, Clock()
-        set_visible(False), set_grab(True)
+    """Main Game Code"""
 
-    def CreateCamera(self):
-        if "2" in self.World:
-            for x in range(len(self.World)):
-                for y in range(len(self.World[x])):
-                    if self.World[x][y] == "2":
-                        pos = [x, y]
-        else:
-            pos = [1, 1]
-            self.World[1][1] = "2"
-        self.camera = Camera(pos, self.CAMERA_VIEWSIZE)
+    def __init__(self, game_world) -> None:
+        self.SCREEN_SIZE, self.CAMERA_VIEWSIZE = 600, 60  # pylint: disable=invalid-name
+        self.screen = set_mode((self.SCREEN_SIZE, self.SCREEN_SIZE))
+        self.running, self.world, self.clock = True, game_world, Clock()
+        _, camera_pos = (set_visible(False), set_grab(True)), self.get_camera_pos()
+        self.camera = Camera(camera_pos, self.CAMERA_VIEWSIZE)
+
+    def get_camera_pos(self):
+        """set starting pos of camera"""
+        if "2" in self.world:
+            for x in range(len(self.world)):
+                for y in range(len(self.world[x])):
+                    if self.world[x][y] == "2":
+                        return [x, y]
+        self.world[1][1] = "2"
+        return [1, 1]
 
     def MainGameLoop(self):
+        """will get events and call functions from them"""
         while self.running:
             self.screen.fill((0, 0, 0))
             self.CheckForUserEvent()
             self.CheckForQuit()
-            self.camera.GetView(self.World, self.SCREEN_SIZE, self.screen)
+            self.camera.GetView(self.world, self.SCREEN_SIZE, self.screen)
             update()
             self.clock.tick(60)
         exit()
 
     def CheckForQuit(self):
+        """check for esc key pressed and close window"""
         for event in get():
             if event.type == QUIT:
                 self.running = False
@@ -47,19 +50,23 @@ class GameObject:
                     self.running = False
 
     def CheckForUserEvent(self):
+        """check for user events and respond"""
         keys = get_pressed()
         if keys[K_UP] or keys[K_w]:
             self.camera.move(1)
         if keys[K_DOWN] or keys[K_s]:
             self.camera.move(-1)
-        self.camera.change_dir()
+        self.camera.direction -= get_rel()[0]
 
 
 class Camera:
+    """class like a player but you see through its eyes"""
+
     def __init__(self, pos, viewsize) -> None:
         self.viewsize, self.pos, self.direction, self.speed = viewsize, pos, 30, 0.01
 
-    def GetView(self, World, SCREEN_SIZE, screen):
+    def GetView(self, World, SCREEN_SIZE, screen):  # pylint: disable=invalid-name
+        """use raycasting technic to generate 3D image"""
         for i in range(self.viewsize):
             height = self.LookAtAngle(i, World, SCREEN_SIZE)
             linex = i + (i * (SCREEN_SIZE / self.viewsize))
@@ -70,28 +77,27 @@ class Camera:
                 (linex, ((SCREEN_SIZE / 2) - (height / 2))),
             )
 
-    def LookAtAngle(self, i, World, SCREEN_SIZE):  # i = for angle in veiwsize
+    def LookAtAngle(self, i, world, SCREEN_SIZE):  # pylint: disable=invalid-name
+        """get height of one part of the image you are looking at"""
         rot_i = (pi / 4) + radians(i - self.direction)
         x, y, n = self.pos[0], self.pos[1], 0
         tsin, tcos = 0.02 * sin(rot_i), 0.02 * cos(rot_i)
         while True:
             x, y, n = x + tcos, y + tsin, n + 1
-            if World[int(x)][int(y)] == "1":
+            if world[int(x)][int(y)] == "1":
                 height = (1 / (0.02 * n)) * SCREEN_SIZE
                 return height
 
     def move(self, move_dir):
+        """move camera in direction backwards or forwards"""
         look_rad = radians(self.direction)
         self.pos[1] += move_dir * self.speed * cos(look_rad)
         self.pos[0] += move_dir * self.speed * sin(look_rad)
 
-    def change_dir(self):
-        self.direction -= get_rel()[0]
-
 
 if __name__ == "__main__":
     init()  # pylint: disable=E1101
-    game_world = [a.split() for a in open("GameWorlds/World.txt").read().split("\n")]
+    with open("World.txt", "r", encoding="utf-8") as world_text:
+        game_world = [a.split() for a in world_text.read().split("\n")]
     my_game = GameObject(game_world)
-    my_game.CreateCamera()
     my_game.MainGameLoop()
