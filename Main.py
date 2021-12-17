@@ -29,18 +29,18 @@ class GameObject:
         self.world[1][1] = "2"
         return [1, 1]
 
-    def MainGameLoop(self):
+    def main_game_loop(self):
         """will get events and call functions from them"""
         while self.running:
             self.screen.fill((0, 0, 0))
-            self.CheckForUserEvent()
-            self.CheckForQuit()
-            self.camera.GetView(self.world, self.SCREEN_SIZE, self.screen)
+            self.check_for_user_event()
+            self.check_for_quit()
+            self.camera.get_view(self.world, self.SCREEN_SIZE, self.screen)
             update()
             self.clock.tick(60)
         exit()
 
-    def CheckForQuit(self):
+    def check_for_quit(self):
         """check for esc key pressed and close window"""
         for event in get():
             if event.type == QUIT:
@@ -49,7 +49,7 @@ class GameObject:
                 if event.key == K_ESCAPE:
                     self.running = False
 
-    def CheckForUserEvent(self):
+    def check_for_user_event(self):
         """check for user events and respond"""
         keys = get_pressed()
         if keys[K_UP] or keys[K_w]:
@@ -65,10 +65,10 @@ class Camera:
     def __init__(self, pos, viewsize) -> None:
         self.viewsize, self.pos, self.direction, self.speed = viewsize, pos, 30, 0.01
 
-    def GetView(self, World, SCREEN_SIZE, screen):  # pylint: disable=invalid-name
+    def get_view(self, world, SCREEN_SIZE, screen):  # pylint: disable=invalid-name
         """use raycasting technic to generate 3D image"""
         for i in range(self.viewsize):
-            height = self.LookAtAngle(i, World, SCREEN_SIZE)
+            height = self.look_at_angle(i, world, SCREEN_SIZE)
             linex = i + (i * (SCREEN_SIZE / self.viewsize))
             line(
                 screen,
@@ -77,7 +77,7 @@ class Camera:
                 (linex, ((SCREEN_SIZE / 2) - (height / 2))),
             )
 
-    def LookAtAngle(self, i, world, SCREEN_SIZE):  # pylint: disable=invalid-name
+    def look_at_angle(self, i, world, SCREEN_SIZE):  # pylint: disable=invalid-name
         """get height of one part of the image you are looking at"""
         rot_i = (pi / 4) + radians(i - self.direction)
         x, y, n = self.pos[0], self.pos[1], 0
@@ -100,4 +100,4 @@ if __name__ == "__main__":
     with open("World.txt", "r", encoding="utf-8") as world_text:
         game_world = [a.split() for a in world_text.read().split("\n")]
     my_game = GameObject(game_world)
-    my_game.MainGameLoop()
+    my_game.main_game_loop()
