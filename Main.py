@@ -39,8 +39,9 @@ class GameObject:
             update()
             self.clock.tick(60)
         exit()
+
     def show_camera_view(self):
-        '''draw veiw recived by camera'''
+        """draw veiw recived by camera"""
         self.camera.get_view(self.world, self.SCREEN_SIZE, self.screen)
 
     def check_for_quit(self):
