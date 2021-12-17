@@ -35,10 +35,13 @@ class GameObject:
             self.screen.fill((0, 0, 0))
             self.check_for_user_event()
             self.check_for_quit()
-            self.camera.get_view(self.world, self.SCREEN_SIZE, self.screen)
+            self.show_camera_view()
             update()
             self.clock.tick(60)
         exit()
+    def show_camera_view(self):
+        '''draw veiw recived by camera'''
+        self.camera.get_view(self.world, self.SCREEN_SIZE, self.screen)
 
     def check_for_quit(self):
         """check for esc key pressed and close window"""
