@@ -17,9 +17,8 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
       - name: Install dependencies
-        run: |
-          cd 
-          python -m pip install --upgrade pip
+        run: | 
+          python -m pip3 install --upgrade pip
           pip3 install -r requirements.txt
       - name: use pyinstaller
         run: |
