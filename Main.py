@@ -81,7 +81,7 @@ class Camera:
                 if world[pos[0]][pos[1]] == world[old_pos[0]][old_pos[1]]:
                     polygon(
                         screen,
-                        (125, i*4, 125),
+                        (125, i * 4, 125),
                         [
                             (old_linex, ((SCREEN_SIZE / 2) + (old_height / 2))),
                             (linex, ((SCREEN_SIZE / 2) + (height / 2))),
