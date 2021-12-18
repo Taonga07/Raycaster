@@ -75,20 +75,24 @@ class Camera:
             height = self.look_at_angle(i, world, SCREEN_SIZE)
             linex = i + (i * (SCREEN_SIZE / self.viewsize))
             if i != self.viewsize:
-                new_height = self.look_at_angle(i+1, world, SCREEN_SIZE)
-                new_linex = i+1 + (i+1 * (SCREEN_SIZE / self.viewsize))
+                new_height = self.look_at_angle(i + 1, world, SCREEN_SIZE)
+                new_linex = i + 1 + (i + 1 * (SCREEN_SIZE / self.viewsize))
                 polygon(
-                    screen, 
+                    screen,
                     (125, 125, 125),
-                    [(linex, ((SCREEN_SIZE / 2) + (height / 2))),
-                    (linex, ((SCREEN_SIZE / 2) - (height / 2))),
-                    (new_linex, ((SCREEN_SIZE / 2) + (new_height / 2))),
-                    (new_linex, ((SCREEN_SIZE / 2) - (new_height / 2)))])
+                    [
+                        (linex, ((SCREEN_SIZE / 2) + (height / 2))),
+                        (linex, ((SCREEN_SIZE / 2) - (height / 2))),
+                        (new_linex, ((SCREEN_SIZE / 2) + (new_height / 2))),
+                        (new_linex, ((SCREEN_SIZE / 2) - (new_height / 2))),
+                    ],
+                )
             line(
                 screen,
                 (125, 125, 125),
                 (linex, ((SCREEN_SIZE / 2) + (height / 2))),
-                (linex, ((SCREEN_SIZE / 2) - (height / 2))))
+                (linex, ((SCREEN_SIZE / 2) - (height / 2))),
+            )
 
     def look_at_angle(self, i, world, SCREEN_SIZE):  # pylint: disable=invalid-name
         """get height of one part of the image you are looking at"""
