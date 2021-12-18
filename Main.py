@@ -77,10 +77,8 @@ class Camera:
                 old_linex = i + (i * (SCREEN_SIZE / self.viewsize))
             else:
                 height, pos = self.look_at_angle(i, world, SCREEN_SIZE)
-                if pos != old_pos:
-                    continue
-                else:
-                    linex = i + (i * (SCREEN_SIZE / self.viewsize))
+                linex = i + (i * (SCREEN_SIZE / self.viewsize))
+                if pos == old_pos:
                     polygon(
                         screen,
                         (125, 125, 125),
