@@ -6,7 +6,7 @@ from pygame.display import set_mode
 from pygame.key import get_pressed
 from pygame.display import update
 from pygame.time import Clock
-from pygame.draw import line
+from pygame.draw import polygon
 
 
 class GameObject:
@@ -72,14 +72,21 @@ class Camera:
     def get_view(self, world, SCREEN_SIZE, screen):  # pylint: disable=invalid-name
         """use raycasting technic to generate 3D image"""
         for i in range(self.viewsize):
-            height = self.look_at_angle(i, world, SCREEN_SIZE)
-            linex = i + (i * (SCREEN_SIZE / self.viewsize))
-            line(
-                screen,
-                (125, 125, 125),
-                (linex, ((SCREEN_SIZE / 2) + (height / 2))),
-                (linex, ((SCREEN_SIZE / 2) - (height / 2))),
-            )
+            if i == 0:
+                old_height, old_pos = self.look_at_angle(i, world, SCREEN_SIZE)
+                old_linex = i + (i * (SCREEN_SIZE / self.viewsize))
+            else:
+                height, pos = self.look_at_angle(i, world, SCREEN_SIZE)
+                if pos != old_pos: continue
+                else:
+                    linex = i + (i * (SCREEN_SIZE / self.viewsize))
+                    polygon(
+                        screen,
+                        (125, 125, 125),
+                        [(linex, ((SCREEN_SIZE / 2) + (height / 2))),
+                        (linex, ((SCREEN_SIZE / 2) - (height / 2))),
+                        (old_linex, ((SCREEN_SIZE / 2) + (old_height / 2))),
+                        (old_linex, ((SCREEN_SIZE / 2) - (old_height / 2)))])
 
     def look_at_angle(self, i, world, SCREEN_SIZE):  # pylint: disable=invalid-name
         """get height of one part of the image you are looking at"""
@@ -90,7 +97,7 @@ class Camera:
             x, y, n = x + tcos, y + tsin, n + 1
             if world[int(x)][int(y)] == "1":
                 height = (1 / (0.02 * n)) * SCREEN_SIZE
-                return height
+                return height, (int(x), int(y))
 
     def move(self, move_dir):
         """move camera in direction backwards or forwards"""
