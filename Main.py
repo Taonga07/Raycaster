@@ -89,7 +89,7 @@ class Camera:
                             (old_linex, ((SCREEN_SIZE / 2) - (old_height / 2))),
                         ],
                     )
-                old_height, old_height = height, linex
+                    old_height, old_linex = height, linex
 
     def look_at_angle(self, i, world, SCREEN_SIZE):  # pylint: disable=invalid-name
         """get height of one part of the image you are looking at"""
