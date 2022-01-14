@@ -13,7 +13,7 @@ class GameObject:
     """Main Game Code"""
 
     def __init__(self, game_world) -> None:
-        self.SCREEN_SIZE, self.CAMERA_VIEWSIZE = 600, 60  # pylint: disable=invalid-name
+        self.SCREEN_SIZE, self.CAMERA_VIEWSIZE = 600, 30  # pylint: disable=invalid-name
         self.screen = set_mode((self.SCREEN_SIZE, self.SCREEN_SIZE))
         self.running, self.world, self.clock = True, game_world, Clock()
         _, camera_pos = (set_visible(False), set_grab(True)), self.get_camera_pos()
@@ -67,7 +67,7 @@ class Camera:
     """class like a player but you see through its eyes"""
 
     def __init__(self, pos, viewsize) -> None:
-        self.viewsize, self.pos, self.direction, self.speed = viewsize, pos, 30, 0.01
+        self.viewsize, self.pos, self.direction, self.speed = viewsize, pos, 60, 0.01
 
     def get_view(self, world, SCREEN_SIZE, screen):  # pylint: disable=invalid-name
         """use raycasting technic to generate 3D image"""
@@ -94,12 +94,12 @@ class Camera:
     def look_at_angle(self, i, world, SCREEN_SIZE):  # pylint: disable=invalid-name
         """get height of one part of the image you are looking at"""
         rot_i = (pi / 4) + radians(i - self.direction)
-        x, y, n = self.pos[0], self.pos[1], 0
+        x, y = self.pos[0], self.pos[1]
         tsin, tcos = 0.02 * sin(rot_i), 0.02 * cos(rot_i)
         while True:
-            x, y, n = x + tcos, y + tsin, n + 1
+            x, y = x + tcos, y + tsin
             if world[int(x)][int(y)] == "1":
-                height = (1 / (0.02 * n)) * SCREEN_SIZE
+                height = (1 / (sin(rot_i))) * SCREEN_SIZE
                 return height, (int(x), int(y))
 
     def move(self, move_dir):
