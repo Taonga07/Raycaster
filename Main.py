@@ -10,12 +10,18 @@ from pygame.draw import polygon
 
 """colours to draw our walls, in lieu of textures"""
 COLOURS = [
-    (255, 0, 0), (0, 255, 0), (0, 0, 255),
-    (255, 255, 0), (0, 255, 255), (255, 0, 255)
-    ]
+    (255, 0, 0),
+    (0, 255, 0),
+    (0, 0, 255),
+    (255, 255, 0),
+    (0, 255, 255),
+    (255, 0, 255),
+]
+
 
 class GameObject:
     """Main Game Code"""
+
     def __init__(self, game_world) -> None:
         self.SCREEN_SIZE, self.CAMERA_VIEWSIZE = 600, 60  # pylint: disable=invalid-name
         self.screen = set_mode((self.SCREEN_SIZE, self.SCREEN_SIZE))
@@ -66,8 +72,10 @@ class GameObject:
             self.camera.move(-1)
         self.camera.direction -= get_rel()[0]
 
+
 class Camera:
     """class like a player but you see through its eyes"""
+
     def __init__(self, pos, viewsize) -> None:
         self.viewsize, self.pos, self.direction, self.speed = viewsize, pos, 30, 0.01
 
@@ -75,12 +83,14 @@ class Camera:
         """use raycasting technic to generate 3D image"""
         for i in range(self.viewsize):
             if i == 0:
-                old_height, old_pos, wall_colour = self.look_at_angle(i, world, SCREEN_SIZE)
+                old_height, old_pos, wall_colour = self.look_at_angle(
+                    i, world, SCREEN_SIZE
+                )
                 old_linex = i + (i * (SCREEN_SIZE / self.viewsize))
             else:
                 height, pos, wall_colour = self.look_at_angle(i, world, SCREEN_SIZE)
                 linex = i + (i * (SCREEN_SIZE / self.viewsize))
-                #if world[pos[0]][pos[1]] == world[old_pos[0]][old_pos[1]]:
+                # if world[pos[0]][pos[1]] == world[old_pos[0]][old_pos[1]]:
                 polygon(
                     screen,
                     wall_colour,
