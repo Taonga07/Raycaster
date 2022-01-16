@@ -18,8 +18,10 @@ COLOURS = [
     (255, 0, 255),
 ]
 
+
 class GameObject:
     """Main Game Code"""
+
     def __init__(self, game_world) -> None:
         self.SCREEN_SIZE, self.CAMERA_VIEWSIZE = 600, 60  # pylint: disable=invalid-name
         self.screen = set_mode((self.SCREEN_SIZE, self.SCREEN_SIZE))
@@ -60,8 +62,10 @@ class GameObject:
             self.camera.move(-1)
         self.camera.direction -= get_rel()[0]
 
+
 class Camera:
     """class like a player but you see through its eyes"""
+
     def __init__(self, pos, viewsize) -> None:
         self.viewsize, self.pos, self.direction, self.speed = viewsize, pos, 30, 0.01
 
@@ -69,9 +73,7 @@ class Camera:
         """use raycasting technic to generate 3D image"""
         for i in range(self.viewsize):
             if i == 0:
-                old_height, wall_colour = self.look_at_angle(
-                    i, world, SCREEN_SIZE
-                )
+                old_height, wall_colour = self.look_at_angle(i, world, SCREEN_SIZE)
                 old_linex = i + (i * (SCREEN_SIZE / self.viewsize))
             else:
                 height, wall_colour = self.look_at_angle(i, world, SCREEN_SIZE)
@@ -105,6 +107,7 @@ class Camera:
         look_rad = radians(self.direction)
         self.pos[1] += move_dir * self.speed * cos(look_rad)
         self.pos[0] += move_dir * self.speed * sin(look_rad)
+
 
 if __name__ == "__main__":
     init()  # pylint: disable=E1101
