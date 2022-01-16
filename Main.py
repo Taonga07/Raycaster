@@ -8,10 +8,14 @@ from pygame.display import update
 from pygame.time import Clock
 from pygame.draw import polygon
 
+"""colours to draw our walls, in lieu of textures"""
+COLOURS = [
+    (255, 0, 0), (0, 255, 0), (0, 0, 255),
+    (255, 255, 0), (0, 255, 255), (255, 0, 255)
+    ]
 
 class GameObject:
     """Main Game Code"""
-
     def __init__(self, game_world) -> None:
         self.SCREEN_SIZE, self.CAMERA_VIEWSIZE = 600, 60  # pylint: disable=invalid-name
         self.screen = set_mode((self.SCREEN_SIZE, self.SCREEN_SIZE))
@@ -21,12 +25,12 @@ class GameObject:
 
     def get_camera_pos(self):
         """set starting pos of camera"""
-        if "2" in self.world:
+        if "-1" in self.world:
             for x in range(len(self.world)):
                 for y in range(len(self.world[x])):
-                    if self.world[x][y] == "2":
+                    if self.world[x][y] == "-1":
                         return [x, y]
-        self.world[1][1] = "2"
+        self.world[1][1] = "-1"
         return [1, 1]
 
     def main_game_loop(self):
@@ -41,7 +45,7 @@ class GameObject:
         exit()
 
     def show_camera_view(self):
-        """draw veiw recived by camera"""
+        """draw veiw received by camera"""
         self.camera.get_view(self.world, self.SCREEN_SIZE, self.screen)
 
     def check_for_quit(self):
@@ -62,10 +66,8 @@ class GameObject:
             self.camera.move(-1)
         self.camera.direction -= get_rel()[0]
 
-
 class Camera:
     """class like a player but you see through its eyes"""
-
     def __init__(self, pos, viewsize) -> None:
         self.viewsize, self.pos, self.direction, self.speed = viewsize, pos, 30, 0.01
 
@@ -73,23 +75,23 @@ class Camera:
         """use raycasting technic to generate 3D image"""
         for i in range(self.viewsize):
             if i == 0:
-                old_height, old_pos = self.look_at_angle(i, world, SCREEN_SIZE)
+                old_height, old_pos, wall_colour = self.look_at_angle(i, world, SCREEN_SIZE)
                 old_linex = i + (i * (SCREEN_SIZE / self.viewsize))
             else:
-                height, pos = self.look_at_angle(i, world, SCREEN_SIZE)
+                height, pos, wall_colour = self.look_at_angle(i, world, SCREEN_SIZE)
                 linex = i + (i * (SCREEN_SIZE / self.viewsize))
-                if world[pos[0]][pos[1]] == world[old_pos[0]][old_pos[1]]:
-                    polygon(
-                        screen,
-                        (125, i * 4, 125),
-                        [
-                            (old_linex, ((SCREEN_SIZE / 2) + (old_height / 2))),
-                            (linex, ((SCREEN_SIZE / 2) + (height / 2))),
-                            (linex, ((SCREEN_SIZE / 2) - (height / 2))),
-                            (old_linex, ((SCREEN_SIZE / 2) - (old_height / 2))),
-                        ],
-                    )
-                    old_height, old_linex = height, linex
+                #if world[pos[0]][pos[1]] == world[old_pos[0]][old_pos[1]]:
+                polygon(
+                    screen,
+                    wall_colour,
+                    [
+                        (old_linex, ((SCREEN_SIZE / 2) + (old_height / 2))),
+                        (linex, ((SCREEN_SIZE / 2) + (height / 2))),
+                        (linex, ((SCREEN_SIZE / 2) - (height / 2))),
+                        (old_linex, ((SCREEN_SIZE / 2) - (old_height / 2))),
+                    ],
+                )
+                old_height, old_linex = height, linex
 
     def look_at_angle(self, i, world, SCREEN_SIZE):  # pylint: disable=invalid-name
         """get height of one part of the image you are looking at"""
@@ -98,9 +100,9 @@ class Camera:
         tsin, tcos = 0.02 * sin(rot_i), 0.02 * cos(rot_i)
         while True:
             x, y, n = x + tcos, y + tsin, n + 1
-            if world[int(x)][int(y)] == "1":
+            if int(world[int(x)][int(y)]) > 0:
                 height = (1 / (0.02 * n)) * SCREEN_SIZE
-                return height, (int(x), int(y))
+                return height, (int(x), int(y)), COLOURS[int(world[int(x)][int(y)])]
 
     def move(self, move_dir):
         """move camera in direction backwards or forwards"""
@@ -111,7 +113,7 @@ class Camera:
 
 if __name__ == "__main__":
     init()  # pylint: disable=E1101
-    with open("World.txt", "r", encoding="utf-8") as world_text:
+    with open("world.txt", "r", encoding="utf-8") as world_text:
         game_world = [a.split() for a in world_text.read().split("\n")]
     my_game = GameObject(game_world)
     my_game.main_game_loop()
