@@ -12,3 +12,6 @@
  - [x] move to pygame
  - [ ] add movement
  - [ ] add z axis
+
+jb notes
+By colouring in the wall segments you can see why the image doesn't look quite right - when the raytracing transitions from a distant wall to a closer wall it doesn't draw the polygon to the next 'hidden' section of distant wall, it draws it to the next segment of closer wall, resulting in the apparent 'bowing' of walls as you walk towards a corner
