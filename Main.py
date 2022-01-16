@@ -18,26 +18,14 @@ COLOURS = [
     (255, 0, 255),
 ]
 
-
 class GameObject:
     """Main Game Code"""
-
     def __init__(self, game_world) -> None:
         self.SCREEN_SIZE, self.CAMERA_VIEWSIZE = 600, 60  # pylint: disable=invalid-name
         self.screen = set_mode((self.SCREEN_SIZE, self.SCREEN_SIZE))
         self.running, self.world, self.clock = True, game_world, Clock()
-        _, camera_pos = (set_visible(False), set_grab(True)), self.get_camera_pos()
+        _, camera_pos = (set_visible(False), set_grab(True)), [1, 1]
         self.camera = Camera(camera_pos, self.CAMERA_VIEWSIZE)
-
-    def get_camera_pos(self):
-        """set starting pos of camera"""
-        if "-1" in self.world:
-            for x in range(len(self.world)):
-                for y in range(len(self.world[x])):
-                    if self.world[x][y] == "-1":
-                        return [x, y]
-        self.world[1][1] = "-1"
-        return [1, 1]
 
     def main_game_loop(self):
         """will get events and call functions from them"""
@@ -72,10 +60,8 @@ class GameObject:
             self.camera.move(-1)
         self.camera.direction -= get_rel()[0]
 
-
 class Camera:
     """class like a player but you see through its eyes"""
-
     def __init__(self, pos, viewsize) -> None:
         self.viewsize, self.pos, self.direction, self.speed = viewsize, pos, 30, 0.01
 
@@ -83,12 +69,12 @@ class Camera:
         """use raycasting technic to generate 3D image"""
         for i in range(self.viewsize):
             if i == 0:
-                old_height, old_pos, wall_colour = self.look_at_angle(
+                old_height, wall_colour = self.look_at_angle(
                     i, world, SCREEN_SIZE
                 )
                 old_linex = i + (i * (SCREEN_SIZE / self.viewsize))
             else:
-                height, pos, wall_colour = self.look_at_angle(i, world, SCREEN_SIZE)
+                height, wall_colour = self.look_at_angle(i, world, SCREEN_SIZE)
                 linex = i + (i * (SCREEN_SIZE / self.viewsize))
                 # if world[pos[0]][pos[1]] == world[old_pos[0]][old_pos[1]]:
                 polygon(
@@ -112,14 +98,13 @@ class Camera:
             x, y, n = x + tcos, y + tsin, n + 1
             if int(world[int(x)][int(y)]) > 0:
                 height = (1 / (0.02 * n)) * SCREEN_SIZE
-                return height, (int(x), int(y)), COLOURS[int(world[int(x)][int(y)])]
+                return height, COLOURS[int(world[int(x)][int(y)])]
 
     def move(self, move_dir):
         """move camera in direction backwards or forwards"""
         look_rad = radians(self.direction)
         self.pos[1] += move_dir * self.speed * cos(look_rad)
         self.pos[0] += move_dir * self.speed * sin(look_rad)
-
 
 if __name__ == "__main__":
     init()  # pylint: disable=E1101
