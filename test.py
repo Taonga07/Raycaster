@@ -56,9 +56,9 @@ resolution = 1  # Pixels per line
 texture1 = pygame.image.load(os.path.join(path, "wall1.jpg"))
 texture2 = pygame.image.load(os.path.join(path, "wall2.jpg"))
 texture3 = pygame.image.load(os.path.join(path, "wall3.bmp"))
-texWidth1, texHeight1 = texture1.get_width(),  texture1.get_height()
-texWidth2, texHeight2 = texture2.get_width(),  texture2.get_height()
-texWidth3, texHeight3 = texture3.get_width(),  texture3.get_height()
+texWidth1, texHeight1 = texture1.get_width(), texture1.get_height()
+texWidth2, texHeight2 = texture2.get_width(), texture2.get_height()
+texWidth3, texHeight3 = texture3.get_width(), texture3.get_height()
 texArray1 = pygame.PixelArray(texture1)
 texArray2 = pygame.PixelArray(texture2)
 texArray3 = pygame.PixelArray(texture3)
@@ -101,7 +101,7 @@ def main():
 
         for x in range(0, WIDTH, resolution):
             # Initial setup
-            cameraX = (2 * x / WIDTH - 1)/2
+            cameraX = (2 * x / WIDTH - 1) / 2
             rayPosX, rayPosY = posX, posY
             # Add small value to avoid division by 0
             rayDirX = dirX + planeX * cameraX + 0.000000000000001
@@ -174,24 +174,26 @@ def main():
             wallX = abs((wallX - floor(wallX)) - 1)
 
             # Find the x coordinate on the texture
-            texX = int(wallX * eval("texWidth"+str(mapGrid[mapX][mapY])))
+            texX = int(wallX * eval("texWidth" + str(mapGrid[mapX][mapY])))
             if side == 0 and rayDirX > 0:
-                texX = eval("texWidth"+str(mapGrid[mapX][mapY])) - texX - 1
+                texX = eval("texWidth" + str(mapGrid[mapX][mapY])) - texX - 1
             if side == 1 and rayDirY < 0:
-                texX = eval("texWidth"+str(mapGrid[mapX][mapY])) - texX - 1
+                texX = eval("texWidth" + str(mapGrid[mapX][mapY])) - texX - 1
 
             c = max(1, (255.0 - rayLength * 27.2) * (1 - side * 0.25))
 
             yStart = max(0, drawStart)
             yStop = min(HEIGHT, drawEnd)
-            pixelsPerTexel = lineHeight / eval("texHeight"+str(mapGrid[mapX][mapY]))
+            pixelsPerTexel = lineHeight / eval("texHeight" + str(mapGrid[mapX][mapY]))
             colStart = int((yStart - drawStart) / pixelsPerTexel + 0.5)
             colHeight = int((yStop - yStart) / pixelsPerTexel + 0.5)
 
             yStart = int(colStart * pixelsPerTexel + drawStart + 0.5)
             yHeight = int(colHeight * pixelsPerTexel + 0.5)
 
-            column = eval("texture"+str(mapGrid[mapX][mapY])).subsurface((texX, colStart, 1, colHeight))
+            column = eval("texture" + str(mapGrid[mapX][mapY])).subsurface(
+                (texX, colStart, 1, colHeight)
+            )
             column = column.copy()
             column.fill((c, c, c), special_flags=BLEND_MULT)
             column = pygame.transform.scale(column, (resolution, yHeight))
