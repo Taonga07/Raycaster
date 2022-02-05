@@ -51,43 +51,24 @@ rotate_speed = 0.01
 move_speed = 0.05
 strafe_speed = 0.04
 wall_height = 1.27
-resolution = 6  # Pixels per line
+resolution = 1  # Pixels per line
 
-texture = pygame.image.load(os.path.join(path, "Blood Wall Dark.bmp"))
-texWidth = texture.get_width()
-texHeight = texture.get_height()
-texArray = pygame.PixelArray(texture)
+texture1 = pygame.image.load(os.path.join(path, "wall1.jpg"))
+texture2 = pygame.image.load(os.path.join(path, "wall2.jpg"))
+texture3 = pygame.image.load(os.path.join(path, "wall3.bmp"))
+texWidth1, texHeight1 = texture1.get_width(),  texture1.get_height()
+texWidth2, texHeight2 = texture2.get_width(),  texture2.get_height()
+texWidth3, texHeight3 = texture3.get_width(),  texture3.get_height()
+texArray1 = pygame.PixelArray(texture1)
+texArray2 = pygame.PixelArray(texture2)
+texArray3 = pygame.PixelArray(texture3)
 old = 0
 
 
 def create_level(file):
-    if file[-4:] != ".txt":
-        file += ".txt"
-    f = open(os.path.join(path, file), "r")
-    file = f.readlines()
-
-    for i, line in enumerate(file):
-        file[i] = list(line.rstrip("\n"))
-        for j, char in enumerate(file[i]):
-            if char == " ":
-                file[i][j] = 0
-            else:
-                file[i][j] = int(char)
-    f.close()
-
-    mapBoundX = len(file)
-    mapBoundY = len(file[0])
-    mapGrid = []
-
-    for i, line in enumerate(file):
-        mapGrid.append([])
-        for j, char in enumerate(file[i]):
-            if char != 0:
-                mapGrid[i].append(char)
-            else:
-                mapGrid[i].append(0)
-
-    return mapBoundX, mapBoundY, mapGrid
+    with open("data/Level.txt", "r", encoding="utf-8") as world_text:
+        game_world = [list(map(int, a.split())) for a in world_text.read().split("\n")]
+    return len(game_world[0]), len(game_world), game_world
 
 
 def Quit():
@@ -120,9 +101,8 @@ def main():
 
         for x in range(0, WIDTH, resolution):
             # Initial setup
-            cameraX = 2 * x / WIDTH - 1
-            rayPosX = posX
-            rayPosY = posY
+            cameraX = (2 * x / WIDTH - 1)/2
+            rayPosX, rayPosY = posX, posY
             # Add small value to avoid division by 0
             rayDirX = dirX + planeX * cameraX + 0.000000000000001
             # Add small value to avoid division by 0
@@ -194,24 +174,24 @@ def main():
             wallX = abs((wallX - floor(wallX)) - 1)
 
             # Find the x coordinate on the texture
-            texX = int(wallX * texWidth)
+            texX = int(wallX * eval("texWidth"+str(mapGrid[mapX][mapY])))
             if side == 0 and rayDirX > 0:
-                texX = texWidth - texX - 1
+                texX = eval("texWidth"+str(mapGrid[mapX][mapY])) - texX - 1
             if side == 1 and rayDirY < 0:
-                texX = texWidth - texX - 1
+                texX = eval("texWidth"+str(mapGrid[mapX][mapY])) - texX - 1
 
             c = max(1, (255.0 - rayLength * 27.2) * (1 - side * 0.25))
 
             yStart = max(0, drawStart)
             yStop = min(HEIGHT, drawEnd)
-            pixelsPerTexel = lineHeight / texHeight
+            pixelsPerTexel = lineHeight / eval("texHeight"+str(mapGrid[mapX][mapY]))
             colStart = int((yStart - drawStart) / pixelsPerTexel + 0.5)
             colHeight = int((yStop - yStart) / pixelsPerTexel + 0.5)
 
             yStart = int(colStart * pixelsPerTexel + drawStart + 0.5)
             yHeight = int(colHeight * pixelsPerTexel + 0.5)
 
-            column = texture.subsurface((texX, colStart, 1, colHeight))
+            column = eval("texture"+str(mapGrid[mapX][mapY])).subsurface((texX, colStart, 1, colHeight))
             column = column.copy()
             column.fill((c, c, c), special_flags=BLEND_MULT)
             column = pygame.transform.scale(column, (resolution, yHeight))
@@ -256,8 +236,6 @@ def main():
             difference = 5
 
         # Vector rotation
-
-        dirX = pygame.mouse.rel()[0]
 
         if difference != 0:
             cosrot = cos(difference * rotate_speed)
