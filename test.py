@@ -39,6 +39,7 @@ HEIGHT = WIDTH = 600
 CLOCK = pygame.time.Clock()
 FPS = 60
 SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.event.set_grab(True)
 
 pygame.display.set_caption("Raycaster")
 pygame.mouse.set_visible(False)
@@ -48,7 +49,7 @@ floor_colour = DARKBROWN
 ceiling_colour = CYAN
 
 rotate_speed = 0.01
-move_speed = 0.05
+move_speed = 0.075
 strafe_speed = 0.04
 wall_height = 1.27
 resolution = 1  # Pixels per line
@@ -56,12 +57,15 @@ resolution = 1  # Pixels per line
 texture1 = pygame.image.load(os.path.join(path, "wall1.jpg"))
 texture2 = pygame.image.load(os.path.join(path, "wall2.jpg"))
 texture3 = pygame.image.load(os.path.join(path, "wall3.bmp"))
+texture4= pygame.image.load(os.path.join(path, "wall4.jpg"))
 texWidth1, texHeight1 = texture1.get_width(),  texture1.get_height()
 texWidth2, texHeight2 = texture2.get_width(),  texture2.get_height()
 texWidth3, texHeight3 = texture3.get_width(),  texture3.get_height()
+texWidth4, texHeight4 = texture4.get_width(),  texture4.get_height()
 texArray1 = pygame.PixelArray(texture1)
 texArray2 = pygame.PixelArray(texture2)
 texArray3 = pygame.PixelArray(texture3)
+texArray4 = pygame.PixelArray(texture4)
 old = 0
 
 
@@ -226,9 +230,7 @@ def main():
 
         # Look left and right
         # Mouse input
-        difference = pygame.mouse.get_pos()[0] - (WIDTH / 2)
-        pygame.mouse.set_pos([WIDTH / 2, HEIGHT / 2])
-
+        difference = pygame.mouse.get_rel()[0]
         # Keyboard input
         if keys[K_q]:
             difference = -5
