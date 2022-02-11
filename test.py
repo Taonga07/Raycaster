@@ -54,10 +54,10 @@ strafe_speed = 0.04
 wall_height = 1.27
 resolution = 1  # Pixels per line
 
-texture1 = pygame.image.load(os.path.join(path, "wall1.jpg"))
-texture2 = pygame.image.load(os.path.join(path, "wall2.jpg"))
-texture3 = pygame.image.load(os.path.join(path, "wall3.bmp"))
-texture4= pygame.image.load(os.path.join(path, "wall4.jpg"))
+texture1 = pygame.image.load(os.path.join(path, "doors/Closed.png"))
+texture2 = pygame.image.load(os.path.join(path, "test2.png"))
+texture3 = pygame.image.load(os.path.join(path, "walls/MossyWall.png"))
+texture4= pygame.image.load(os.path.join(path, "walls/BloodWall.png"))
 texWidth1, texHeight1 = texture1.get_width(),  texture1.get_height()
 texWidth2, texHeight2 = texture2.get_width(),  texture2.get_height()
 texWidth3, texHeight3 = texture3.get_width(),  texture3.get_height()
@@ -153,8 +153,10 @@ def main():
                     or mapY >= mapBoundY
                     or mapX < 0
                     or mapY < 0
-                    or mapGrid[mapX][mapY] > 0
+                    or mapGrid[mapX][mapY] != 0
                 ):
+                    if mapGrid[mapX][mapY] == 2:
+                        pass
                     break
 
             # Calculate the total length of the ray

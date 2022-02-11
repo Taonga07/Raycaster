@@ -1,0 +1,36 @@
+{
+    "01": {  
+        "name": "Walls",
+        "Blood Wall": {
+            "Image": "/data/walls/0.png", 
+            "Resistance": 1
+        },
+        "Moss Wall": {
+            "Image": "/data/walls/1.png",
+            "Resistance": 1
+        },
+        "Cobbeled Wall": {
+            "Image": "/data/walls/3.png",
+            "Resistance": 1
+        }
+    },
+    "Doors": {
+        "normal":{
+            "Blood Wall Bg": {
+                "OpenImage": "/data/doors/0.png",
+                "ClosedImage": "/data/doors/0.png",
+                "OpenResistance": 0
+            },
+            "Moss Wall Bg": {
+                "Image": "/data/walls/1.png",
+                "Resistance": 1
+            },
+            "Cobbeled Wall Bg": {
+                "Image": "/data/walls/3.png",
+                "Resistance": 1
+            }
+        }
+
+    }
+
+}
