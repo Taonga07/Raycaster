@@ -72,7 +72,7 @@ old = 0
 def create_level(file):
     with open("data/Level.txt", "r", encoding="utf-8") as world_text:
         game_world = [list(map(int, a.split())) for a in world_text.read().split("\n")]
-    return len(game_world[0]), len(game_world), game_world
+    return len(game_world[0])-1, len(game_world)-1, game_world
 
 
 def Quit():
@@ -82,7 +82,6 @@ def Quit():
 
 def main():
     mapBoundX, mapBoundY, mapGrid = create_level("Level")
-
     posX, posY = 8.5, 10.5
     dirX, dirY = 1.0, 0.0
     planeX, planeY = 0.0, 0.66
@@ -135,75 +134,31 @@ def main():
                 stepY = 1
                 sideDistY = (mapY + 1 - rayPosY) * deltaDistY
 
-            # Digital differential analysis (DDA)
-            while True:
-                # Jump to next map square
-                if sideDistX < sideDistY:
-                    sideDistX += deltaDistX
-                    mapX += stepX
-                    side = 0
-                else:
-                    sideDistY += deltaDistY
-                    mapY += stepY
-                    side = 1
-
-                # Check if ray hits wall or leaves the map boundries
-                if (
-                    mapX >= mapBoundX
-                    or mapY >= mapBoundY
-                    or mapX < 0
-                    or mapY < 0
-                    or mapGrid[mapX][mapY] != 0
-                ):
-                    if mapGrid[mapX][mapY] == 2:
-                        pass
-                    break
-
-            # Calculate the total length of the ray
-            if side == 0:
-                rayLength = (mapX - rayPosX + (1 - stepX) / 2) / rayDirX
+        # Digital differential analysis (DDA)
+        while True:
+            # Jump to next map square
+            if sideDistX < sideDistY:
+                sideDistX += deltaDistX
+                mapX += stepX
+                side = 0
             else:
-                rayLength = (mapY - rayPosY + (1 - stepY) / 2) / rayDirY
+                sideDistY += deltaDistY
+                mapY += stepY
+                side = 1
 
-            # Calculate the length of the line to draw on the screen
-            lineHeight = (HEIGHT / rayLength) * wall_height
-
-            # Calculate the start and end point of each line
-            drawStart = -lineHeight / 2 + (HEIGHT) / 2
-            drawEnd = lineHeight / 2 + (HEIGHT) / 2
-
-            # Calculate where exactly the wall was hit
-            if side == 0:
-                wallX = rayPosY + rayLength * rayDirY
-            else:
-                wallX = rayPosX + rayLength * rayDirX
-            wallX = abs((wallX - floor(wallX)) - 1)
-
-            # Find the x coordinate on the texture
-            texX = int(wallX * eval("texWidth" + str(mapGrid[mapX][mapY])))
-            if side == 0 and rayDirX > 0:
-                texX = eval("texWidth" + str(mapGrid[mapX][mapY])) - texX - 1
-            if side == 1 and rayDirY < 0:
-                texX = eval("texWidth" + str(mapGrid[mapX][mapY])) - texX - 1
-
-            c = max(1, (255.0 - rayLength * 27.2) * (1 - side * 0.25))
-
-            yStart = max(0, drawStart)
-            yStop = min(HEIGHT, drawEnd)
-            pixelsPerTexel = lineHeight / eval("texHeight" + str(mapGrid[mapX][mapY]))
-            colStart = int((yStart - drawStart) / pixelsPerTexel + 0.5)
-            colHeight = int((yStop - yStart) / pixelsPerTexel + 0.5)
-
-            yStart = int(colStart * pixelsPerTexel + drawStart + 0.5)
-            yHeight = int(colHeight * pixelsPerTexel + 0.5)
-
-            column = eval("texture" + str(mapGrid[mapX][mapY])).subsurface(
-                (texX, colStart, 1, colHeight)
-            )
-            column = column.copy()
-            column.fill((c, c, c), special_flags=BLEND_MULT)
-            column = pygame.transform.scale(column, (resolution, yHeight))
-            SCREEN.blit(column, (x, yStart))
+            # Check if ray hits wall or leaves the map boundries
+            if (
+                mapX >= mapBoundX
+                or mapY >= mapBoundY
+                or mapX < 0
+                or mapY < 0
+                or mapGrid[mapX][mapY] != 0
+            ):
+                if (mapX <= mapBoundX) and (mapY <= mapBoundY):
+                    if (mapGrid[mapX][mapY] == 2):                    
+                        raycasting(sideDistX, sideDistY, deltaDistX, deltaDistY, stepX, stepY, mapBoundX, mapBoundY, mapGrid, rayDirX, rayDirY, rayPosX, rayPosY, x)
+                        break
+        raycasting(sideDistX, sideDistY, deltaDistX, deltaDistY, stepX, stepY, mapBoundX, mapBoundY, mapGrid, rayDirX, rayDirY, rayPosX, rayPosY, x)
 
         # Movement controls
         keys = pygame.key.get_pressed()
@@ -256,6 +211,79 @@ def main():
         pygame.display.update()
         CLOCK.tick(FPS)
 
+def raycasting(sideDistX, sideDistY, deltaDistX, deltaDistY, stepX, stepY, mapBoundX, mapBoundY, mapGrid, rayDirX, rayDirY, rayPosX, rayPosY, x):
+    # Digital differential analysis (DDA)
+    while True:
+        # Jump to next map square
+        if sideDistX < sideDistY:
+            sideDistX += deltaDistX
+            mapX += stepX
+            side = 0
+        else:
+            sideDistY += deltaDistY
+            mapY += stepY
+            side = 1
+
+        # Check if ray hits wall or leaves the map boundries
+        if (
+            mapX >= mapBoundX
+            or mapY >= mapBoundY
+            or mapX < 0
+            or mapY < 0
+            or mapGrid[mapX][mapY] != 0
+        ):
+            if (mapX <= mapBoundX) and (mapY <= mapBoundY):
+                if (mapGrid[mapX][mapY] == 2):                        
+                    raycasting(sideDistX, sideDistY, deltaDistX, deltaDistY, stepX, stepY, mapBoundX, mapBoundY, mapGrid, rayDirX, rayDirY, rayPosX, rayPosY, x)
+                    break
+    raycasting(sideDistX, sideDistY, deltaDistX, deltaDistY, stepX, stepY, mapBoundX, mapBoundY, mapGrid, rayDirX, rayDirY, rayPosX, rayPosY, x)
+
+
+    # Calculate the total length of the ray
+    if side == 0:
+        rayLength = (mapX - rayPosX + (1 - stepX) / 2) / rayDirX
+    else:
+        rayLength = (mapY - rayPosY + (1 - stepY) / 2) / rayDirY
+
+    # Calculate the length of the line to draw on the screen
+    lineHeight = (HEIGHT / rayLength) * wall_height
+
+    # Calculate the start and end point of each line
+    drawStart = -lineHeight / 2 + (HEIGHT) / 2
+    drawEnd = lineHeight / 2 + (HEIGHT) / 2
+
+    # Calculate where exactly the wall was hit
+    if side == 0:
+        wallX = rayPosY + rayLength * rayDirY
+    else:
+        wallX = rayPosX + rayLength * rayDirX
+    wallX = abs((wallX - floor(wallX)) - 1)
+
+    # Find the x coordinate on the texture
+    texX = int(wallX * eval("texWidth" + str(mapGrid[mapX][mapY])))
+    if side == 0 and rayDirX > 0:
+        texX = eval("texWidth" + str(mapGrid[mapX][mapY])) - texX - 1
+    if side == 1 and rayDirY < 0:
+        texX = eval("texWidth" + str(mapGrid[mapX][mapY])) - texX - 1
+
+    c = max(1, (255.0 - rayLength * 27.2) * (1 - side * 0.25))
+
+    yStart = max(0, drawStart)
+    yStop = min(HEIGHT, drawEnd)
+    pixelsPerTexel = lineHeight / eval("texHeight" + str(mapGrid[mapX][mapY]))
+    colStart = int((yStart - drawStart) / pixelsPerTexel + 0.5)
+    colHeight = int((yStop - yStart) / pixelsPerTexel + 0.5)
+
+    yStart = int(colStart * pixelsPerTexel + drawStart + 0.5)
+    yHeight = int(colHeight * pixelsPerTexel + 0.5)
+
+    column = eval("texture" + str(mapGrid[mapX][mapY])).subsurface(
+        (texX, colStart, 1, colHeight)
+    )
+    column = column.copy()
+    column.fill((c, c, c), special_flags=BLEND_MULT)
+    column = pygame.transform.scale(column, (resolution, yHeight))
+    SCREEN.blit(column, (x, yStart)) 
 
 if __name__ == "__main__":
     main()
