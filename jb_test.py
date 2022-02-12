@@ -79,8 +79,9 @@ def Quit():
     pygame.quit()
     sys.exit()
 
-def layer_trace(sideDistX, sideDistY, deltaDistX, deltaDistY, mapBoundX, mapBoundY, side, mapX, mapY, rayPosX, rayPosY, stepX, stepY, rayDirX, rayDirY, mapGrid):
+def layer_trace(x, sideDistX, sideDistY, deltaDistX, deltaDistY, mapBoundX, mapBoundY, side, mapX, mapY, rayPosX, rayPosY, stepX, stepY, rayDirX, rayDirY, mapGrid):
     # we need to go to the furthest point, and work back towards the ray origin
+    # sort of works, you can see the further wall, but not yet added 'door' back as last item
     while True:
         # Jump to next map square
         if sideDistX < sideDistY:
@@ -107,6 +108,7 @@ def layer_trace(sideDistX, sideDistY, deltaDistX, deltaDistY, mapBoundX, mapBoun
     return sideDistX, sideDistY, mapX, mapY
 
 def raytrace(side, mapX, mapY, rayPosX, rayPosY, stepX, stepY, rayDirX, rayDirY, mapGrid):
+    # moved here so we can reuse the code
     # Calculate the total length of the ray
     if side == 0:
         rayLength = (mapX - rayPosX + (1 - stepX) / 2) / rayDirX
@@ -231,7 +233,9 @@ def main():
                     if mapGrid[mapX][mapY] != 2:
                         break
                     else:
-                        sideDistX, sideDistY, mapX, mapY = layer_trace(sideDistX, sideDistY, deltaDistX, deltaDistY, mapBoundX, mapBoundY, side, mapX, mapY, rayPosX, rayPosY, stepX, stepY, rayDirX, rayDirY, mapGrid)
+                        # invoke layering
+                        sideDistX, sideDistY, mapX, mapY = layer_trace(x, sideDistX, sideDistY, deltaDistX, deltaDistY, mapBoundX, mapBoundY, side, mapX, mapY, rayPosX, rayPosY, stepX, stepY, rayDirX, rayDirY, mapGrid)
+            # normal raytrace (closest thing is the only thing we can see)
             trace_column, yStart = raytrace(side, mapX, mapY, rayPosX, rayPosY, stepX, stepY, rayDirX, rayDirY, mapGrid)
             SCREEN.blit(trace_column, (x, yStart))
 
