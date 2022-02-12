@@ -72,7 +72,7 @@ old = 0
 def create_level(file):
     with open("data/Level.txt", "r", encoding="utf-8") as world_text:
         game_world = [list(map(int, a.split())) for a in world_text.read().split("\n")]
-    return len(game_world[0])-1, len(game_world)-1, game_world
+    return len(game_world[0]) - 1, len(game_world) - 1, game_world
 
 
 def Quit():
@@ -155,10 +155,40 @@ def main():
                 or mapGrid[mapX][mapY] != 0
             ):
                 if (mapX <= mapBoundX) and (mapY <= mapBoundY):
-                    if (mapGrid[mapX][mapY] == 2):                    
-                        raycasting(sideDistX, sideDistY, deltaDistX, deltaDistY, stepX, stepY, mapBoundX, mapBoundY, mapGrid, rayDirX, rayDirY, rayPosX, rayPosY, x)
+                    if mapGrid[mapX][mapY] == 2:
+                        raycasting(
+                            sideDistX,
+                            sideDistY,
+                            deltaDistX,
+                            deltaDistY,
+                            stepX,
+                            stepY,
+                            mapBoundX,
+                            mapBoundY,
+                            mapGrid,
+                            rayDirX,
+                            rayDirY,
+                            rayPosX,
+                            rayPosY,
+                            x,
+                        )
                         break
-        raycasting(sideDistX, sideDistY, deltaDistX, deltaDistY, stepX, stepY, mapBoundX, mapBoundY, mapGrid, rayDirX, rayDirY, rayPosX, rayPosY, x)
+        raycasting(
+            sideDistX,
+            sideDistY,
+            deltaDistX,
+            deltaDistY,
+            stepX,
+            stepY,
+            mapBoundX,
+            mapBoundY,
+            mapGrid,
+            rayDirX,
+            rayDirY,
+            rayPosX,
+            rayPosY,
+            x,
+        )
 
         # Movement controls
         keys = pygame.key.get_pressed()
@@ -211,7 +241,23 @@ def main():
         pygame.display.update()
         CLOCK.tick(FPS)
 
-def raycasting(sideDistX, sideDistY, deltaDistX, deltaDistY, stepX, stepY, mapBoundX, mapBoundY, mapGrid, rayDirX, rayDirY, rayPosX, rayPosY, x):
+
+def raycasting(
+    sideDistX,
+    sideDistY,
+    deltaDistX,
+    deltaDistY,
+    stepX,
+    stepY,
+    mapBoundX,
+    mapBoundY,
+    mapGrid,
+    rayDirX,
+    rayDirY,
+    rayPosX,
+    rayPosY,
+    x,
+):
     # Digital differential analysis (DDA)
     while True:
         # Jump to next map square
@@ -233,11 +279,40 @@ def raycasting(sideDistX, sideDistY, deltaDistX, deltaDistY, stepX, stepY, mapBo
             or mapGrid[mapX][mapY] != 0
         ):
             if (mapX <= mapBoundX) and (mapY <= mapBoundY):
-                if (mapGrid[mapX][mapY] == 2):                        
-                    raycasting(sideDistX, sideDistY, deltaDistX, deltaDistY, stepX, stepY, mapBoundX, mapBoundY, mapGrid, rayDirX, rayDirY, rayPosX, rayPosY, x)
+                if mapGrid[mapX][mapY] == 2:
+                    raycasting(
+                        sideDistX,
+                        sideDistY,
+                        deltaDistX,
+                        deltaDistY,
+                        stepX,
+                        stepY,
+                        mapBoundX,
+                        mapBoundY,
+                        mapGrid,
+                        rayDirX,
+                        rayDirY,
+                        rayPosX,
+                        rayPosY,
+                        x,
+                    )
                     break
-    raycasting(sideDistX, sideDistY, deltaDistX, deltaDistY, stepX, stepY, mapBoundX, mapBoundY, mapGrid, rayDirX, rayDirY, rayPosX, rayPosY, x)
-
+    raycasting(
+        sideDistX,
+        sideDistY,
+        deltaDistX,
+        deltaDistY,
+        stepX,
+        stepY,
+        mapBoundX,
+        mapBoundY,
+        mapGrid,
+        rayDirX,
+        rayDirY,
+        rayPosX,
+        rayPosY,
+        x,
+    )
 
     # Calculate the total length of the ray
     if side == 0:
@@ -283,7 +358,8 @@ def raycasting(sideDistX, sideDistY, deltaDistX, deltaDistY, stepX, stepY, mapBo
     column = column.copy()
     column.fill((c, c, c), special_flags=BLEND_MULT)
     column = pygame.transform.scale(column, (resolution, yHeight))
-    SCREEN.blit(column, (x, yStart)) 
+    SCREEN.blit(column, (x, yStart))
+
 
 if __name__ == "__main__":
     main()
