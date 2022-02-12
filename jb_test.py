@@ -57,11 +57,11 @@ resolution = 1  # Pixels per line
 texture1 = pygame.image.load(os.path.join(path, "doors/Closed.png"))
 texture2 = pygame.image.load(os.path.join(path, "test2.png"))
 texture3 = pygame.image.load(os.path.join(path, "walls/MossyWall.png"))
-texture4= pygame.image.load(os.path.join(path, "walls/BloodWall.png"))
-texWidth1, texHeight1 = texture1.get_width(),  texture1.get_height()
-texWidth2, texHeight2 = texture2.get_width(),  texture2.get_height()
-texWidth3, texHeight3 = texture3.get_width(),  texture3.get_height()
-texWidth4, texHeight4 = texture4.get_width(),  texture4.get_height()
+texture4 = pygame.image.load(os.path.join(path, "walls/BloodWall.png"))
+texWidth1, texHeight1 = texture1.get_width(), texture1.get_height()
+texWidth2, texHeight2 = texture2.get_width(), texture2.get_height()
+texWidth3, texHeight3 = texture3.get_width(), texture3.get_height()
+texWidth4, texHeight4 = texture4.get_width(), texture4.get_height()
 texArray1 = pygame.PixelArray(texture1)
 texArray2 = pygame.PixelArray(texture2)
 texArray3 = pygame.PixelArray(texture3)
@@ -103,7 +103,9 @@ def layer_trace(x, sideDistX, sideDistY, deltaDistX, deltaDistY, mapBoundX, mapB
         ):
             if mapGrid[mapX][mapY] != 2:
                 break
-    trace_column, yStart = raytrace(side, mapX, mapY, rayPosX, rayPosY, stepX, stepY, rayDirX, rayDirY, mapGrid)
+    trace_column, yStart = raytrace(
+        side, mapX, mapY, rayPosX, rayPosY, stepX, stepY, rayDirX, rayDirY, mapGrid
+    )
     SCREEN.blit(trace_column, (x, yStart))
     return sideDistX, sideDistY, mapX, mapY
 
@@ -154,6 +156,7 @@ def raytrace(side, mapX, mapY, rayPosX, rayPosY, stepX, stepY, rayDirX, rayDirY,
     column.fill((c, c, c), special_flags=BLEND_MULT)
     column = pygame.transform.scale(column, (resolution, yHeight))
     return column, yStart
+
 
 def main():
     mapBoundX, mapBoundY, mapGrid = create_level("Level")
