@@ -57,11 +57,11 @@ resolution = 1  # Pixels per line
 texture1 = pygame.image.load(os.path.join(path, "doors/Closed.png"))
 texture2 = pygame.image.load(os.path.join(path, "test2.png"))
 texture3 = pygame.image.load(os.path.join(path, "walls/MossyWall.png"))
-texture4= pygame.image.load(os.path.join(path, "walls/BloodWall.png"))
-texWidth1, texHeight1 = texture1.get_width(),  texture1.get_height()
-texWidth2, texHeight2 = texture2.get_width(),  texture2.get_height()
-texWidth3, texHeight3 = texture3.get_width(),  texture3.get_height()
-texWidth4, texHeight4 = texture4.get_width(),  texture4.get_height()
+texture4 = pygame.image.load(os.path.join(path, "walls/BloodWall.png"))
+texWidth1, texHeight1 = texture1.get_width(), texture1.get_height()
+texWidth2, texHeight2 = texture2.get_width(), texture2.get_height()
+texWidth3, texHeight3 = texture3.get_width(), texture3.get_height()
+texWidth4, texHeight4 = texture4.get_width(), texture4.get_height()
 texArray1 = pygame.PixelArray(texture1)
 texArray2 = pygame.PixelArray(texture2)
 texArray3 = pygame.PixelArray(texture3)
@@ -79,7 +79,25 @@ def Quit():
     pygame.quit()
     sys.exit()
 
-def layer_trace(sideDistX, sideDistY, deltaDistX, deltaDistY, mapBoundX, mapBoundY, side, mapX, mapY, rayPosX, rayPosY, stepX, stepY, rayDirX, rayDirY, mapGrid):
+
+def layer_trace(
+    sideDistX,
+    sideDistY,
+    deltaDistX,
+    deltaDistY,
+    mapBoundX,
+    mapBoundY,
+    side,
+    mapX,
+    mapY,
+    rayPosX,
+    rayPosY,
+    stepX,
+    stepY,
+    rayDirX,
+    rayDirY,
+    mapGrid,
+):
     # we need to go to the furthest point, and work back towards the ray origin
     while True:
         # Jump to next map square
@@ -102,11 +120,16 @@ def layer_trace(sideDistX, sideDistY, deltaDistX, deltaDistY, mapBoundX, mapBoun
         ):
             if mapGrid[mapX][mapY] != 2:
                 break
-    trace_column, yStart = raytrace(side, mapX, mapY, rayPosX, rayPosY, stepX, stepY, rayDirX, rayDirY, mapGrid)
+    trace_column, yStart = raytrace(
+        side, mapX, mapY, rayPosX, rayPosY, stepX, stepY, rayDirX, rayDirY, mapGrid
+    )
     SCREEN.blit(trace_column, (x, yStart))
     return sideDistX, sideDistY, mapX, mapY
 
-def raytrace(side, mapX, mapY, rayPosX, rayPosY, stepX, stepY, rayDirX, rayDirY, mapGrid):
+
+def raytrace(
+    side, mapX, mapY, rayPosX, rayPosY, stepX, stepY, rayDirX, rayDirY, mapGrid
+):
     # Calculate the total length of the ray
     if side == 0:
         rayLength = (mapX - rayPosX + (1 - stepX) / 2) / rayDirX
@@ -152,6 +175,7 @@ def raytrace(side, mapX, mapY, rayPosX, rayPosY, stepX, stepY, rayDirX, rayDirY,
     column.fill((c, c, c), special_flags=BLEND_MULT)
     column = pygame.transform.scale(column, (resolution, yHeight))
     return column, yStart
+
 
 def main():
     mapBoundX, mapBoundY, mapGrid = create_level("Level")
@@ -231,8 +255,36 @@ def main():
                     if mapGrid[mapX][mapY] != 2:
                         break
                     else:
-                        sideDistX, sideDistY, mapX, mapY = layer_trace(sideDistX, sideDistY, deltaDistX, deltaDistY, mapBoundX, mapBoundY, side, mapX, mapY, rayPosX, rayPosY, stepX, stepY, rayDirX, rayDirY, mapGrid)
-            trace_column, yStart = raytrace(side, mapX, mapY, rayPosX, rayPosY, stepX, stepY, rayDirX, rayDirY, mapGrid)
+                        sideDistX, sideDistY, mapX, mapY = layer_trace(
+                            sideDistX,
+                            sideDistY,
+                            deltaDistX,
+                            deltaDistY,
+                            mapBoundX,
+                            mapBoundY,
+                            side,
+                            mapX,
+                            mapY,
+                            rayPosX,
+                            rayPosY,
+                            stepX,
+                            stepY,
+                            rayDirX,
+                            rayDirY,
+                            mapGrid,
+                        )
+            trace_column, yStart = raytrace(
+                side,
+                mapX,
+                mapY,
+                rayPosX,
+                rayPosY,
+                stepX,
+                stepY,
+                rayDirX,
+                rayDirY,
+                mapGrid,
+            )
             SCREEN.blit(trace_column, (x, yStart))
 
         # Movement controls
