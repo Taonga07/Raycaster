@@ -79,7 +79,26 @@ def Quit():
     pygame.quit()
     sys.exit()
 
-def layer_trace(x, sideDistX, sideDistY, deltaDistX, deltaDistY, mapBoundX, mapBoundY, side, mapX, mapY, rayPosX, rayPosY, stepX, stepY, rayDirX, rayDirY, mapGrid):
+
+def layer_trace(
+    x,
+    sideDistX,
+    sideDistY,
+    deltaDistX,
+    deltaDistY,
+    mapBoundX,
+    mapBoundY,
+    side,
+    mapX,
+    mapY,
+    rayPosX,
+    rayPosY,
+    stepX,
+    stepY,
+    rayDirX,
+    rayDirY,
+    mapGrid,
+):
     # we need to go to the furthest point, and work back towards the ray origin
     # sort of works, you can see the further wall, but not yet added 'door' back as last item
     while True:
@@ -109,7 +128,10 @@ def layer_trace(x, sideDistX, sideDistY, deltaDistX, deltaDistY, mapBoundX, mapB
     SCREEN.blit(trace_column, (x, yStart))
     return sideDistX, sideDistY, mapX, mapY
 
-def raytrace(side, mapX, mapY, rayPosX, rayPosY, stepX, stepY, rayDirX, rayDirY, mapGrid):
+
+def raytrace(
+    side, mapX, mapY, rayPosX, rayPosY, stepX, stepY, rayDirX, rayDirY, mapGrid
+):
     # moved here so we can reuse the code
     # Calculate the total length of the ray
     if side == 0:
@@ -237,9 +259,38 @@ def main():
                         break
                     else:
                         # invoke layering
-                        sideDistX, sideDistY, mapX, mapY = layer_trace(x, sideDistX, sideDistY, deltaDistX, deltaDistY, mapBoundX, mapBoundY, side, mapX, mapY, rayPosX, rayPosY, stepX, stepY, rayDirX, rayDirY, mapGrid)
+                        sideDistX, sideDistY, mapX, mapY = layer_trace(
+                            x,
+                            sideDistX,
+                            sideDistY,
+                            deltaDistX,
+                            deltaDistY,
+                            mapBoundX,
+                            mapBoundY,
+                            side,
+                            mapX,
+                            mapY,
+                            rayPosX,
+                            rayPosY,
+                            stepX,
+                            stepY,
+                            rayDirX,
+                            rayDirY,
+                            mapGrid,
+                        )
             # normal raytrace (closest thing is the only thing we can see)
-            trace_column, yStart = raytrace(side, mapX, mapY, rayPosX, rayPosY, stepX, stepY, rayDirX, rayDirY, mapGrid)
+            trace_column, yStart = raytrace(
+                side,
+                mapX,
+                mapY,
+                rayPosX,
+                rayPosY,
+                stepX,
+                stepY,
+                rayDirX,
+                rayDirY,
+                mapGrid,
+            )
             SCREEN.blit(trace_column, (x, yStart))
 
         # Movement controls
