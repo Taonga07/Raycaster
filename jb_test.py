@@ -119,7 +119,10 @@ def layer_trace(posX, posY, x, sideDistX, sideDistY, deltaDistX, deltaDistY, map
     SCREEN.blit(trace_column, (x, yStart))
     return sideDistX, sideDistY, mapX, mapY
 
-def raytrace(side, mapX, mapY, rayPosX, rayPosY, stepX, stepY, rayDirX, rayDirY, mapGrid):
+
+def raytrace(
+    side, mapX, mapY, rayPosX, rayPosY, stepX, stepY, rayDirX, rayDirY, mapGrid
+):
     # moved here so we can reuse the code
     # Calculate the total length of the ray
     if side == 0:
@@ -249,7 +252,18 @@ def main():
                         # invoke layering
                         sideDistX, sideDistY, mapX, mapY = layer_trace(posX, posY, x, sideDistX, sideDistY, deltaDistX, deltaDistY, mapBoundX, mapBoundY, side, mapX, mapY, rayPosX, rayPosY, stepX, stepY, rayDirX, rayDirY, mapGrid)
             # normal raytrace (closest thing is the only thing we can see)
-            trace_column, yStart = raytrace(side, mapX, mapY, rayPosX, rayPosY, stepX, stepY, rayDirX, rayDirY, mapGrid)
+            trace_column, yStart = raytrace(
+                side,
+                mapX,
+                mapY,
+                rayPosX,
+                rayPosY,
+                stepX,
+                stepY,
+                rayDirX,
+                rayDirY,
+                mapGrid,
+            )
             SCREEN.blit(trace_column, (x, yStart))
 
         # Movement controls
