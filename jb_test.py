@@ -79,7 +79,28 @@ def Quit():
     pygame.quit()
     sys.exit()
 
-def layer_trace(posX, posY, x, sideDistX, sideDistY, deltaDistX, deltaDistY, mapBoundX, mapBoundY, side, mapX, mapY, rayPosX, rayPosY, stepX, stepY, rayDirX, rayDirY, mapGrid):
+
+def layer_trace(
+    posX,
+    posY,
+    x,
+    sideDistX,
+    sideDistY,
+    deltaDistX,
+    deltaDistY,
+    mapBoundX,
+    mapBoundY,
+    side,
+    mapX,
+    mapY,
+    rayPosX,
+    rayPosY,
+    stepX,
+    stepY,
+    rayDirX,
+    rayDirY,
+    mapGrid,
+):
     # we need to go to the furthest point, and work back towards the ray origin
     # sort of works, you can see the further wall, but not yet added 'door' back as last item
     while True:
@@ -94,12 +115,7 @@ def layer_trace(posX, posY, x, sideDistX, sideDistY, deltaDistX, deltaDistY, map
             side = 1
 
         # Check if ray reached the map boundries
-        if (
-            mapX >= mapBoundX
-            or mapY >= mapBoundY
-            or mapX < 0
-            or mapY < 0
-            ):
+        if mapX >= mapBoundX or mapY >= mapBoundY or mapX < 0 or mapY < 0:
             if mapX > mapBoundX:
                 mapX = mapBoundX
             elif mapX < 0:
@@ -109,9 +125,9 @@ def layer_trace(posX, posY, x, sideDistX, sideDistY, deltaDistX, deltaDistY, map
             else:
                 mapY = 0
             break
-    ''' mapX, mapY should now be edge of map for ray trace
+    """ mapX, mapY should now be edge of map for ray trace
     now we need to loop back towards player viewing point posX, posY
-    and draw everything we see layered up '''
+    and draw everything we see layered up """
     # new code goes here
     trace_column, yStart = raytrace(
         side, mapX, mapY, rayPosX, rayPosY, stepX, stepY, rayDirX, rayDirY, mapGrid
@@ -250,7 +266,27 @@ def main():
                         break
                     else:
                         # invoke layering
-                        sideDistX, sideDistY, mapX, mapY = layer_trace(posX, posY, x, sideDistX, sideDistY, deltaDistX, deltaDistY, mapBoundX, mapBoundY, side, mapX, mapY, rayPosX, rayPosY, stepX, stepY, rayDirX, rayDirY, mapGrid)
+                        sideDistX, sideDistY, mapX, mapY = layer_trace(
+                            posX,
+                            posY,
+                            x,
+                            sideDistX,
+                            sideDistY,
+                            deltaDistX,
+                            deltaDistY,
+                            mapBoundX,
+                            mapBoundY,
+                            side,
+                            mapX,
+                            mapY,
+                            rayPosX,
+                            rayPosY,
+                            stepX,
+                            stepY,
+                            rayDirX,
+                            rayDirY,
+                            mapGrid,
+                        )
             # normal raytrace (closest thing is the only thing we can see)
             trace_column, yStart = raytrace(
                 side,
